@@ -1,0 +1,13 @@
+[Server]
+Port=":12306"
+key="spppk"
+[DB]
+Addr = ""
+User = ""
+Pass = ""
+DBName = ""
+[DBDev]
+Addr = "localhost"
+User = "root"
+Pass = "123456"
+DBName = "zhihu"
