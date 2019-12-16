@@ -2,10 +2,10 @@
 Port=":12306"
 key="spppk"
 [DB]
-Addr = ""
-User = ""
-Pass = ""
-DBName = ""
+Addr = "localhost"
+User = "zhihu"
+Pass = "akdbJnaKApJfxsrd"
+DBName = "zhihu"
 [DBDev]
 Addr = "localhost"
 User = "root"
