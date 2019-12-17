@@ -6,6 +6,7 @@ import (
 
 func (s *Service) initRouter() {
 	r := gin.Default()
+	r.Use(s.CORSMiddleware())
 
 	/* 登陆获取token*/
 	r.GET("/auth/login",
