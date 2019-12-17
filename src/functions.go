@@ -19,6 +19,7 @@ func(s *Service)makeAuth(UserID string) (string,error) {
 		tx.Rollback()
 		return "",errors.New("insert null")
 	}
+	tx.Commit()
 	return AccessToken,nil
 }
 
