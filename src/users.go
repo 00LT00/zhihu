@@ -68,7 +68,9 @@ func (s *Service) GetUser(c *gin.Context) (int, interface{}) {
 		return s.makeSuccessJSON(User)
 	}
 
-	s.DB.Where(user{UserID: UserID}).Find(&User)
+	if s.DB.Where(user{UserID: UserID}).Find(&User).RowsAffected != 1 {
+		return s.makeErrJSON(404, 40400, "UserID error")
+	}
 	//	本人获取
 	if loginUserID == UserID {
 		return s.makeSuccessJSON(User)
@@ -97,7 +99,7 @@ func (s *Service) Change(c *gin.Context) (int, interface{}) {
 	}
 	tx := s.DB.Begin()
 	var User user
-	if err := tx.Model(&User).Updates(user{PassWord: PassWord, Phone: Phone, Email: Email, Avatar: Avatar, NickName: NickName, Introduction: Introduction}).Error; err != nil {
+	if err := tx.Model(&User).Where(user{UserID: UserID}).Updates(user{PassWord: PassWord, Phone: Phone, Email: Email, Avatar: Avatar, NickName: NickName, Introduction: Introduction}).Error; err != nil {
 		tx.Rollback()
 		return s.makeErrJSON(500, 50000, err.Error())
 	}
