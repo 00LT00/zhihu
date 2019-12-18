@@ -24,7 +24,7 @@ func(s *Service)Register(c *gin.Context)(int,interface{}){
 	}
 	//	防止用户名重复
 	count:=0
-	s.DB.Where(user{UserName:UserName}).Count(&count)
+	s.DB.Table("users").Where(&user{UserName:UserName}).Count(&count)
 	if count !=0 {
 		return s.makeErrJSON(403,40302,"Duplicate username")
 	}

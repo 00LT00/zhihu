@@ -1,12 +1,13 @@
 package main
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func (s *Service) initRouter() {
 	r := gin.Default()
-	r.Use(s.CORSMiddleware())
+	r.Use(cors.Default())
 
 	/* 登陆获取token*/
 	r.GET("/auth/login",
