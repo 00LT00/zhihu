@@ -19,7 +19,7 @@ func (s *Service) initRouter() {
 		})
 
 	/* 用户模块*/
-	users:= r.Group("/users",
+	users := r.Group("/users",
 		func(c *gin.Context) {
 			s.check(c)
 		})
@@ -40,7 +40,7 @@ func (s *Service) initRouter() {
 		})
 
 	/*	文章模块*/
-	articles:=r.Group("/articles",
+	articles := r.Group("/articles",
 		func(c *gin.Context) {
 			s.check(c)
 		})
@@ -62,7 +62,7 @@ func (s *Service) initRouter() {
 	})
 
 	/*	问题模块*/
-	questions:=r.Group("/questions",
+	questions := r.Group("/questions",
 		func(c *gin.Context) {
 			s.check(c)
 		})
@@ -81,6 +81,28 @@ func (s *Service) initRouter() {
 	//	查找全部问题，可选多种排序
 	questions.GET("/all/:flag", func(c *gin.Context) {
 		c.JSON(s.GetQuestions(c))
+	})
+
+	/* 	回答模块*/
+	answers := r.Group("/answers",
+		func(c *gin.Context) {
+			s.check(c)
+		})
+	//	发布回答
+	answers.POST("/", func(c *gin.Context) {
+		c.JSON(s.AddAnswer(c))
+	})
+	//	根据回答id获取回答
+	answers.GET("/", func(c *gin.Context) {
+		c.JSON(s.GetAnswerByID(c))
+	})
+	//	获得问题的答案
+	answers.GET("/question/:flag", func(c *gin.Context) {
+		c.JSON(s.GetAnswersByQuestionID(c))
+	})
+	//	获得用户的所有回答
+	answers.GET("/user/:flag", func(c *gin.Context) {
+		c.JSON(s.GetAnswersByToken(c))
 	})
 
 	s.Router = r
