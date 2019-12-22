@@ -64,6 +64,9 @@ func (s *Service) GetAllComments(c *gin.Context) (int, interface{}) {
 	if err != nil {
 		return s.makeErrJSON(500, 50000, err.Error())
 	}
+	for i := 0; i < len(Comments); i++ {
+		s.DB.Select("user_id,nick_name,avatar,introduction").Where(user{UserID: Comments[i].UserID}).Find(&Comments[i].User)
+	}
 	return s.makeSuccessJSON(Comments)
 }
 
@@ -76,5 +79,8 @@ func (s *Service) GetCommentsByTargetID(c *gin.Context) (int, interface{}) {
 	}
 	var Comments []comment
 	s.DB.Where(comment{TargetID: TargetID}).Order("updated_at").Find(&Comments)
+	for i := 0; i < len(Comments); i++ {
+		s.DB.Select("user_id,nick_name,avatar,introduction").Where(user{UserID: Comments[i].UserID}).Find(&Comments[i].User)
+	}
 	return s.makeSuccessJSON(Comments)
 }

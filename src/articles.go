@@ -50,6 +50,9 @@ func (s *Service) GetArticle(c *gin.Context) (int, interface{}) {
 	if err != nil {
 		return s.makeErrJSON(500, 50000, err.Error())
 	}
+	for i := 0; i < len(Articles); i++ {
+		s.DB.Select("user_id,nick_name,avatar,introduction").Where(user{UserID: Articles[i].UserID}).Find(&Articles[i].User)
+	}
 	return s.makeSuccessJSON(Articles)
 }
 
@@ -63,6 +66,7 @@ func (s *Service) GetArticleByID(c *gin.Context) (int, interface{}) {
 	}
 	var Article article
 	s.DB.Where(article{ArticleID: ArticleID}).Find(&Article)
+	s.DB.Select("user_id,nick_name,avatar,introduction").Where(user{UserID: Article.UserID}).Find(&Article.User)
 	return s.makeSuccessJSON(Article)
 }
 
@@ -89,6 +93,9 @@ func (s *Service) GetArticles(c *gin.Context) (int, interface{}) {
 	err = db.Find(&Articles).Error
 	if err != nil {
 		return s.makeErrJSON(500, 50000, err.Error())
+	}
+	for i := 0; i < len(Articles); i++ {
+		s.DB.Select("user_id,nick_name,avatar,introduction").Where(user{UserID: Articles[i].UserID}).Find(&Articles[i].User)
 	}
 	return s.makeSuccessJSON(Articles)
 }

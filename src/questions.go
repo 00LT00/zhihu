@@ -45,12 +45,15 @@ func (s *Service) GetQuestion(c *gin.Context) (int, interface{}) {
 	if err != nil {
 		return s.makeErrJSON(403, 40301, err.Error())
 	}
-	var Question []question
-	err = s.DB.Where(question{UserID: UserID}).Find(&Question).Error
+	var Questions []question
+	err = s.DB.Where(question{UserID: UserID}).Find(&Questions).Error
 	if err != nil {
 		return s.makeErrJSON(500, 50000, err.Error())
 	}
-	return s.makeSuccessJSON(Question)
+	for i := 0; i < len(Questions); i++ {
+		s.DB.Select("user_id,nick_name,avatar,introduction").Where(user{UserID: Questions[i].UserID}).Find(&Questions[i].User)
+	}
+	return s.makeSuccessJSON(Questions)
 }
 
 //	根据问题id获取
@@ -63,6 +66,7 @@ func (s *Service) GetQuestionByID(c *gin.Context) (int, interface{}) {
 	}
 	var Question question
 	s.DB.Where(question{QuestionID: QuestionID}).Find(&Question)
+	s.DB.Select("user_id,nick_name,avatar,introduction").Where(user{UserID: Question.UserID}).Find(&Question.User)
 	return s.makeSuccessJSON(Question)
 }
 
@@ -85,10 +89,13 @@ func (s *Service) GetQuestions(c *gin.Context) (int, interface{}) {
 	default:
 		db = s.DB
 	}
-	var Question []question
-	err = db.Find(&Question).Error
+	var Questions []question
+	err = db.Find(&Questions).Error
 	if err != nil {
 		return s.makeErrJSON(500, 50000, err.Error())
 	}
-	return s.makeSuccessJSON(Question)
+	for i := 0; i < len(Questions); i++ {
+		s.DB.Select("user_id,nick_name,avatar,introduction").Where(user{UserID: Questions[i].UserID}).Find(&Questions[i].User)
+	}
+	return s.makeSuccessJSON(Questions)
 }
