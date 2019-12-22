@@ -105,6 +105,24 @@ func (s *Service) initRouter() {
 		c.JSON(s.GetAnswersByToken(c))
 	})
 
+	/*	评论模块*/
+	comments := r.Group("/comments",
+		func(c *gin.Context) {
+			s.check(c)
+		})
+	//	发评论
+	comments.POST("/", func(c *gin.Context) {
+		c.JSON(s.AddComment(c))
+	})
+	//	根据文章id或者问题回答id获取评论
+	comments.GET("/id/:flag", func(c *gin.Context) {
+		c.JSON(s.GetAllComments(c))
+	})
+	//	根据评论id获取评论详情
+	comments.GET("/target/", func(c *gin.Context) {
+		c.JSON(s.GetCommentsByTargetID(c))
+	})
+
 	s.Router = r
 	err := s.Router.Run(s.Conf.Server.Port)
 	panic(err)
