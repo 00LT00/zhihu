@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
@@ -21,13 +20,10 @@ func (s *Service) AddComment(c *gin.Context) (int, interface{}) {
 	var tempComment comment
 	var TargetID string
 	s.DB.Where(comment{CommentID: ParentID}).Find(&tempComment)
-	fmt.Println(tempComment)
 	if tempComment.TargetID == "" {
 		TargetID = CommentID
-		fmt.Println("aaa")
 	} else {
 		TargetID = tempComment.TargetID
-		fmt.Println("bbb")
 	}
 	tx := s.DB.Begin()
 	if err := tx.Create(&comment{CommentID: CommentID, TargetID: TargetID, UserID: UserID, ParentID: ParentID, Content: Content}).Error; err != nil {
