@@ -100,5 +100,6 @@ func (s *Service) GetAnswerByID(c *gin.Context) (int, interface{}) {
 	if s.DB.Where(answer{AnswerID: AnswerID}).Find(&Answer).RowsAffected != 1 {
 		return s.makeErrJSON(500, 50000, "AnswerID error")
 	}
+	s.DB.Select("user_id,nick_name,avatar,introduction").Where(user{UserID: Answer.UserID}).Find(&Answer.User)
 	return s.makeSuccessJSON(Answer)
 }
