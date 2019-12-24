@@ -123,6 +123,16 @@ func (s *Service) initRouter() {
 		c.JSON(s.GetCommentsByTargetID(c))
 	})
 
+	/*	动态表*/
+	messages := r.Group("/messages",
+		func(c *gin.Context) {
+			s.check(c)
+		})
+	//点赞点踩
+	messages.POST("/", func(c *gin.Context) {
+		c.JSON(s.message(c))
+	})
+
 	s.Router = r
 	err := s.Router.Run(s.Conf.Server.Port)
 	panic(err)
