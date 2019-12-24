@@ -24,8 +24,6 @@ type question struct {
 	User           user   `gorm:"ForeignKey:UserID"`
 	Title          string `gorm:"not null"`
 	Content        string `gorm:"not null;type:text"`
-	CommentCount   int64
-	AnswerCount    int64
 	ViewCount      int64
 	FollowersCount int64
 	FavoriteCount  int64
@@ -38,7 +36,6 @@ type answer struct {
 	UserID         string `gorm:"not null"`
 	User           user   `gorm:"ForeignKey:UserID"`
 	Content        string `gorm:"not null;type:text"`
-	CommentCount   int64
 	UpVoteCount    int64
 	DownVoteCount  int64
 	FollowersCount int64
@@ -64,7 +61,6 @@ type comment struct {
 	User           user   `gorm:"ForeignKey:UserID"`
 	ParentID       string `gorm:"not null"`
 	Content        string `gorm:"not null"`
-	Count          int64
 	UpVoteCount    int64
 	DownVoteCount  int64
 	FollowersCount int64
